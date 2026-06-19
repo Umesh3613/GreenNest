@@ -19,12 +19,15 @@ tabs.forEach(tab => {
 // Load products
 async function loadProducts() {
     try {
-        const res = await fetch("http://localhost:5000/api/products");
+        const res = await fetch("/api/products");
         const data = await res.json();
 
         const container = document.querySelector(".product-container");
         container.innerHTML = "";
-
+        if (data.length === 0) {
+            container.innerHTML = "<p>No products available.</p>";
+            return;
+        }
         data.forEach(product => {
             container.innerHTML += `
                 <div class="card">
@@ -41,11 +44,16 @@ async function loadProducts() {
 // Load bookings
 async function loadMyBookings() {
     try {
-        const res = await fetch("http://localhost:5000/api/bookings");
+        const res = await fetch("/api/bookings");
         const data = await res.json();
 
         const container = document.querySelector(".bookings-container");
         container.innerHTML = "";
+
+        if (data.length === 0) {
+            container.innerHTML = "<p>Currenly you have no bookings.</p>";
+            return;
+        }
 
         data.forEach(booking => {
             container.innerHTML += `
@@ -77,7 +85,7 @@ form.addEventListener("submit", async function (e) {
     };
 
     try {
-        const res = await fetch("http://localhost:5000/api/bookings", {
+        const res = await fetch("/api/bookings", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
