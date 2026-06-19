@@ -113,7 +113,7 @@ form.addEventListener("submit", async function (e) {
     };
 
     try {
-        const res = await fetch("/api/gardeningServices", {
+        const res = await fetch("/api/bookings", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
