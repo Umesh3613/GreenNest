@@ -5,6 +5,7 @@ GreenNest is a simple full-stack gardening application built with Node.js, Expre
 ## Features
 
 - Browse available plants from the database
+- Explore plants and services through attractive homepage buttons
 - View gardening services on the frontend
 - Submit a gardener booking request
 - See saved bookings in the My Bookings section
@@ -27,6 +28,7 @@ GreenNest is a simple full-stack gardening application built with Node.js, Expre
 - `routes/bookingRoutes.js` - Booking API routes
 - `public/index.html` - Frontend page
 - `public/style.css` - Frontend styling
+- `public/script.js` - Frontend logic
 
 ## API Endpoints
 
@@ -56,6 +58,12 @@ GreenNest is a simple full-stack gardening application built with Node.js, Expre
 	npm start
 	```
 
+   For development with automatic restart, use:
+
+	```bash
+	npm run start:dev
+	```
+
 4. Open the application in your browser:
 
 	```
@@ -65,8 +73,10 @@ GreenNest is a simple full-stack gardening application built with Node.js, Expre
 ## Notes
 
 - The frontend uses hardcoded local API URLs, so it is currently set up for local development.
+- The homepage includes two CTA buttons to jump directly to plants and services.
 - There is no authentication or admin panel yet.
 - `config/db.js` is available as a reusable connection helper, but `server.js` currently connects to MongoDB directly.
+- The app is deployment-ready for Render with MongoDB Atlas using environment variables.
 
 ## Future Improvements
 

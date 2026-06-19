@@ -49,6 +49,67 @@ nav a {
     background: #e8f5e9;
 }
 
+#home {
+    text-align: center;
+    padding: 70px 20px;
+    background: linear-gradient(180deg, #f4fbf4 0%, #e9f7eb 100%);
+}
+
+#home h2 {
+    margin-bottom: 12px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #1b5e20;
+}
+
+#home p {
+    margin: 0 auto 28px;
+    max-width: 620px;
+    color: #4f6b52;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.hero-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.hero-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.16);
+}
+
+.hero-button-primary {
+    background: linear-gradient(135deg, #2e7d32, #43a047);
+    color: white;
+}
+
+.hero-button-secondary {
+    background: white;
+    color: #2e7d32;
+    border: 2px solid rgba(46, 125, 50, 0.18);
+}
+
+.hero-button-secondary:hover {
+    background: #f3fbf4;
+}
+
 .product-container, .service-container {
     display: flex;
     justify-content: center;

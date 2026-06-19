@@ -1,5 +1,6 @@
 // Tab switching
-const tabs = document.querySelectorAll(".tab-link");
+const tabs = document.querySelectorAll(".tab-link[data-tab]");
+const headerTabs = document.querySelectorAll("header .tab-link[data-tab]");
 const contents = document.querySelectorAll(".tab-content");
 
 tabs.forEach(tab => {
@@ -8,10 +9,14 @@ tabs.forEach(tab => {
 
         const target = this.getAttribute("data-tab");
 
-        tabs.forEach(currentTab => currentTab.classList.remove("active"));
+        headerTabs.forEach(currentTab => currentTab.classList.remove("active"));
         contents.forEach(content => content.classList.remove("active"));
 
-        this.classList.add("active");
+        const activeHeaderTab = document.querySelector(`header .tab-link[data-tab="${target}"]`);
+        if (activeHeaderTab) {
+            activeHeaderTab.classList.add("active");
+        }
+
         document.getElementById(target).classList.add("active");
     });
 });
@@ -38,6 +43,29 @@ async function loadProducts() {
         });
     } catch (error) {
         console.log("Error loading products:", error);
+    }
+}
+async function loadServices() {
+    try {
+        const res = await fetch("/api/gardeningServices");
+        const data = await res.json();
+
+        const container = document.querySelector(".service-container");
+        container.innerHTML = "";
+        if (data.length === 0) {
+            container.innerHTML = "<p>No services available.</p>";
+            return;
+        }
+        data.forEach(service => {
+            container.innerHTML += `
+                <div class="service-card">
+                    <h3>${service.name}</h3>
+                    <p>${service.description}</p>
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.log("Error loading services:", error);
     }
 }
 
@@ -85,7 +113,7 @@ form.addEventListener("submit", async function (e) {
     };
 
     try {
-        const res = await fetch("/api/bookings", {
+        const res = await fetch("/api/gardeningServices", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -137,5 +165,6 @@ function checkForm() {
 
 window.onload = () => {
     loadProducts();
+    loadServices();
     loadMyBookings();
 };

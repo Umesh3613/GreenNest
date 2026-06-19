@@ -5,6 +5,7 @@ const path = require("path");
 require("dotenv").config();
 const bookingRoutes = require("./routes/bookingRoutes");
 const productRoutes = require("./routes/productRoutes");
+const gardeningServiceRoutes = require("./routes/gardeningServiceRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,7 +29,10 @@ app.get("/", (req, res) => {
 // Products API
 app.use("/api/products", productRoutes);
 
-// ✅ BOOKING API (VERY IMPORTANT)
+// Gardening Services API 
+app.use("/api/gardeningServices", gardeningServiceRoutes);
+
+// ✅ BOOKING API 
 app.use("/api/bookings", bookingRoutes);
 
 // Server Start
