@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenNest</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>🌱 GreenNest</h1>
+        <nav>
+            <a href="#" class="tab-link active" data-tab="home">Home</a>
+            <a href="#" class="tab-link" data-tab="products">Plants</a>
+            <a href="#" class="tab-link" data-tab="services">Services</a>
+            <a href="#" class="tab-link" data-tab="booking">Book Gardener</a>
+            <a href="#" class="tab-link" data-tab="myBookings">My Bookings</a>
+        </nav>
+    </header>
+
+    <section class="tab-body">
+        <!-- HOME -->
+        <section id="home" class="tab-content active">
+            <h2>Welcome to GreenNest</h2>
+            <p>Your one-stop solution for plants and gardening services</p>
+            <button>Explore Now</button>
+        </section>
+
+        <!-- PRODUCTS -->
+        <section id="products" class="tab-content">
+            <h2>🌿 Our Plants</h2>
+            <div class="product-container"></div>
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services" class="tab-content">
+            <h2>🌼 Gardening Services</h2>
+
+            <div class="service-container">
+                <div class="service-card">
+                    <h3>Home Gardening </h3>
+                    <p>Professional gardeners for your home</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>Plant Maintenance</h3>
+                    <p>Keep your plants healthy and fresh</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>Landscape Design</h3>
+                    <p>Design your dream garden</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOOKING -->
+        <section id="booking" class="tab-content">
+            <h2>📅 Book a Gardener</h2>
+
+            <form id="bookingForm">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="text" id="service" placeholder="Service Type" required>
+                <input type="date" id="date" required>
+                <input type="text" id="address" placeholder="Address" required>
+                <button type="submit" id="bookBtn" class="disabled" disabled>Book Now</button>
+            </form>
+        </section>
+
+        <!-- MY BOOKINGS -->
+        <section id="myBookings" class="tab-content">
+            <h2>📅 My Bookings</h2>
+            <div class="bookings-container"></div>
+        </section>
+    </section>
+
+    <footer>
+        <p>© 2026 GreenNest | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // 🔹 Tab switching
+        const tabs = document.querySelectorAll(".tab-link");
+        const contents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const target = this.getAttribute("data-tab");
+
+                tabs.forEach(t => t.classList.remove("active"));
+                contents.forEach(c => c.classList.remove("active"));
+
+                this.classList.add("active");
+                document.getElementById(target).classList.add("active");
+            });
+        });
+
+        // 🔹 Load products
+        async function loadProducts() {
+            try {
+                const res = await fetch("http://localhost:5000/api/products");
+                const data = await res.json();
+
+                const container = document.querySelector(".product-container");
+                container.innerHTML = "";
+
+                data.forEach(product => {
+                    container.innerHTML += `
+                <div class="card">
+                    <h3>${product.name}</h3>
+                    <p>₹${product.price}</p>
+                </div>
+            `;
+                });
+            } catch (error) {
+                console.log("Error loading products:", error);
+            }
+        }
+
+        // 🔹 Load bookings
+        async function loadMyBookings() {
+            try {
+                const res = await fetch("http://localhost:5000/api/bookings");
+                const data = await res.json();
+
+                const container = document.querySelector(".bookings-container");
+                container.innerHTML = "";
+
+                data.forEach(booking => {
+                    container.innerHTML += `
+                <div class="card">
+                    <h3>${booking.name}</h3>
+                    <p>${booking.service}</p>
+                    <p>${booking.date}</p>
+                    <p>${booking.address}</p>
+                </div>
+            `;
+                });
+            } catch (error) {
+                console.log("Error loading products:", error);
+            }
+        }
+
+        // 🔹 Booking form submit
+        const form = document.getElementById("bookingForm");
+        const bookBtn = document.getElementById("bookBtn");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const bookingData = {
+                name: document.getElementById("name").value,
+                service: document.getElementById("service").value,
+                date: document.getElementById("date").value,
+                address: document.getElementById("address").value
+            };
+
+            try {
+                const res = await fetch("http://localhost:5000/api/bookings", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+
+                await res.json();
+
+                loadMyBookings();
+
+                alert("Booking Successful ✅");
+
+                form.reset();
+
+                // Disable button again after reset
+                bookBtn.disabled = true;
+                bookBtn.classList.add("disabled");
+
+            } catch (error) {
+                console.log(error);
+                alert("Booking Failed ❌");
+            }
+        });
+
+        // 🔹 Enable/Disable button logic
+        const nameInput = document.getElementById("name");
+        const serviceInput = document.getElementById("service");
+        const dateInput = document.getElementById("date");
+        const addressInput = document.getElementById("address");
+
+        function checkForm() {
+            if (
+                nameInput.value.trim() !== "" &&
+                serviceInput.value.trim() !== "" &&
+                dateInput.value !== "" &&
+                addressInput.value.trim() !== ""
+            ) {
+                bookBtn.disabled = false;
+                bookBtn.classList.remove("disabled");
+            } else {
+                bookBtn.disabled = true;
+                bookBtn.classList.add("disabled");
+            }
+        }
+
+        // Listen to input changes
+        [nameInput, serviceInput, dateInput, addressInput].forEach(input => {
+            input.addEventListener("input", checkForm);
+        });
+
+        // 🔹 Run on load
+        window.onload = () => {
+            loadProducts();
+            loadMyBookings();
+        }
+    </script>
+
+</body>
+
+</html>
