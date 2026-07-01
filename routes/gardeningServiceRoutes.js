@@ -5,7 +5,17 @@ const GardeningService = require("../models/gardeningService");
 // GET all services
 router.get("/", async (req, res) => {
     try {
-        const services = await GardeningService.find();
+        const query = {};
+
+        if (req.query.city) {
+            query.city = new RegExp(req.query.city, "i");
+        }
+
+        if (req.query.locality) {
+            query.locality = new RegExp(req.query.locality, "i");
+        }
+        const services = await GardeningService.find(query);
+
         res.json(services);
     } catch (error) {
         res.status(500).json({ message: error.message });

@@ -6,6 +6,8 @@ require("dotenv").config();
 const bookingRoutes = require("./routes/bookingRoutes");
 const productRoutes = require("./routes/productRoutes");
 const gardeningServiceRoutes = require("./routes/gardeningServiceRoutes");
+const checkoutRoutes = require("./routes/checkoutRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +36,12 @@ app.use("/api/gardeningServices", gardeningServiceRoutes);
 
 // ✅ BOOKING API 
 app.use("/api/bookings", bookingRoutes);
+
+// Checkout API
+app.use("/api/checkout", checkoutRoutes);
+
+// Auth API
+app.use("/api/auth", authRoutes);
 
 // Server Start
 app.listen(PORT, () => {

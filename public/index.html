@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenNest</title>
     <link rel="stylesheet" href="./style.css">
+
+    <script src="./script.js"></script>
+    
+    <!-- 1. Include the official Razorpay Checkout library -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 
 <body>
@@ -18,17 +23,22 @@
             <a href="#" class="tab-link" data-tab="services">Services</a>
             <a href="#" class="tab-link" data-tab="booking">Book Gardener</a>
             <a href="#" class="tab-link" data-tab="myBookings">My Bookings</a>
+            <a href="#" class="tab-link auth-link" data-tab="signin" id="authNavLink">Sign In</a>
+            <a href="#" class="tab-link auth-link" data-tab="signup" id="signupNavLink">Sign Up</a>
         </nav>
     </header>
 
     <section class="tab-body">
         <!-- HOME -->
         <section id="home" class="tab-content active">
-            <h2>Welcome to GreenNest</h2>
-            <p>Your one-stop solution for plants and gardening services</p>
-            <div class="hero-actions">
-                <a href="#" class="tab-link hero-button hero-button-primary" data-tab="products">Explore Plants</a>
-                <a href="#" class="tab-link hero-button hero-button-secondary" data-tab="services">Explore Services</a>
+            <div class="hero-content">
+                <p class="eyebrow">Online nursery and gardening care</p>
+                <h2>GreenNest</h2>
+                <p>Book trusted gardeners, discover healthy plants, and plan recurring garden care in your area.</p>
+                <div class="hero-actions">
+                    <a href="#" class="tab-link hero-button hero-button-primary" data-tab="services">Find Services</a>
+                    <a href="#" class="tab-link hero-button hero-button-secondary" data-tab="products">Explore Plants</a>
+                </div>
             </div>
         </section>
 
@@ -40,7 +50,18 @@
 
         <!-- SERVICES -->
         <section id="services" class="tab-content">
-            <h2>🌼 Gardening Services</h2>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Service marketplace</p>
+                    <h2>🌼 Gardening Services</h2>
+                </div>
+            </div>
+
+            <div class="service-search">
+                <input type="text" id="serviceCitySearch" placeholder="Search city">
+                <input type="text" id="serviceLocalitySearch" placeholder="Search locality / area">
+                <button type="button" id="clearServiceSearch">Clear</button>
+            </div>
 
             <div class="service-container"></div>
         </section>
@@ -51,9 +72,37 @@
 
             <form id="bookingForm">
                 <input type="text" id="name" placeholder="Your Name" required>
-                <input type="text" id="service" placeholder="Service Type" required>
+                <select id="service" required>
+                    <option value="">Select Service Type</option>
+                </select>
                 <input type="date" id="date" required>
+                <select id="duration" required>
+                    <option value="">Select Service Duration</option>
+                    <option value="One Time">One Time</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quarterly">Quarterly</option>
+                </select>
+                <input type="text" id="city" placeholder="City" required>
+                <input type="text" id="locality" placeholder="Locality / Area" required>
                 <input type="text" id="address" placeholder="Address" required>
+                <fieldset class="payment-options">
+                    <legend>Payment option</legend>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="payLater" checked>
+                        <span>
+                            <strong>Pay later</strong>
+                            <small>Confirm booking now and pay after service.</small>
+                        </span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="payNow">
+                        <span>
+                            <strong>Pay now</strong>
+                            <small>Create a secure checkout order online.</small>
+                        </span>
+                    </label>
+                </fieldset>
                 <button type="submit" id="bookBtn" class="disabled" disabled>Book Now</button>
             </form>
         </section>
@@ -63,13 +112,59 @@
             <h2>📅 My Bookings</h2>
             <div class="bookings-container"></div>
         </section>
+
+        <!-- SIGN IN -->
+        <section id="signin" class="tab-content">
+            <div class="auth-panel">
+                <div>
+                    <p class="eyebrow">Member access</p>
+                    <h2>Sign in to continue</h2>
+                    <p>Book gardening services and view your saved bookings after signing in.</p>
+                </div>
+
+                <div id="signinPanel">
+                    <form id="signinForm" class="auth-form">
+                        <input type="email" id="signinEmail" placeholder="Email address" required>
+                        <input type="password" id="signinPassword" placeholder="Password" required>
+                        <button type="submit">Sign In</button>
+                    </form>
+
+                    <p class="auth-toggle-text">
+                        Don't have an account?
+                        <a href="#" id="showSignupLink" class="auth-toggle-link">Create one</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- SIGN UP -->
+        <section id="signup" class="tab-content">
+            <div class="auth-panel">
+                <div id="signupPanel" class="auth-signup-panel" hidden>
+                    <div>
+                        <p class="eyebrow">New here?</p>
+                        <h3>Create an account</h3>
+                        <p>Sign up to keep your bookings and access services easily.</p>
+                    </div>
+
+                    <form id="signupForm" class="auth-form">
+                        <input type="text" id="signupUsername" placeholder="Username (optional)">
+                        <input type="email" id="signupEmail" placeholder="Email address" required>
+                        <input type="password" id="signupPassword" placeholder="Password" required>
+                        <button type="submit">Create Account</button>
+                    </form>
+
+                    <p class="auth-toggle-text">
+                        Already have an account?
+                        <a href="#" id="showSigninLink" class="auth-toggle-link">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </section>
     </section>
 
     <footer>
         <p>© 2026 GreenNest | All Rights Reserved</p>
     </footer>
-
-    <script src="./script.js"></script>
 
 </body>
 
