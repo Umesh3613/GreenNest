@@ -361,14 +361,29 @@ async function createPaymentOrder() {
     return res.json();
 }
 
-function handlePayment(order) {
+async function handlePayment(order) {
     if (typeof Razorpay === "undefined") {
         alert("Payment gateway is not loaded. Please refresh and try again.");
         return;
     }
 
+    let key = "";
+
+    try {
+        const configRes = await fetch("/api/checkout/config");
+        const configData = await configRes.json();
+        key = configData.key;
+    } catch (error) {
+        console.log("Unable to load Razorpay config:", error);
+    }
+
+    if (!key) {
+        alert("Payment gateway is not configured. Please contact support.");
+        return;
+    }
+
     const options = {
-        key: "rzp_test_T50JaxvWk0jVgv",
+        key,
         amount: order.amount.toString(),
         currency: order.currency || "INR",
         name: "Greennest",
